@@ -1,4 +1,4 @@
-module github.com/joaomlucio/projeto
+module github.com/joaomlucio/projeto/api
 
 go 1.19
 
