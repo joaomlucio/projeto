@@ -1,4 +1,4 @@
-package user
+package main
 
 import (
 	"github.com/go-playground/validator/v10"
@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"github.com/joaomlucio/projeto/api/user/models/user"
+	"github.com/joaomlucio/projeto/api/user/models"
 )
 
 
@@ -70,8 +70,8 @@ func deleteUser(id string) (*mongo.DeleteResult, error) {
 	return collection.DeleteOne(ctx, filter)
 }
 
-func findUsers() ([]*User, error) {
-	var users []*User
+func findUsers() ([]*models.User, error) {
+	var users []*models.User
 	filter := bson.D{{}}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -79,7 +79,7 @@ func findUsers() ([]*User, error) {
 	}
 
 	for cursor.Next(ctx) {
-		var u User
+		var u models.User
 		err := cursor.Decode(&u)
 		if err != nil {
 			return users, err
