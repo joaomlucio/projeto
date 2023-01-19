@@ -1,10 +1,7 @@
 package main
 
 import (
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-
-	"context"
 	"encoding/json"
 )
 

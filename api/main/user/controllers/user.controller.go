@@ -1,9 +1,5 @@
 package controllers
 
-import (
-	""
-)
-
 func GetAll(c *fiber.Ctx) error {
 	users, err := findUsers()
 	if err != nil {
@@ -18,3 +14,4 @@ func GetAll(c *fiber.Ctx) error {
 	c.Response().BodyWriter().Write(blob)
 	return c.SendStatus(200)
 }
+

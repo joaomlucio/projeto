@@ -2,13 +2,13 @@ package services
 
 import (
 	"github.com/go-playground/validator"
-	"github.com/joaomlucio/projeto/api/user/models/dtos"
+	"github.com/joaomlucio/projeto/api/mongo/models"
+	"github.com/joaomlucio/projeto/api/mongo/models/dtos"
 	mgm "github.com/joaomlucio/projeto/api/mongo"
-
-	"github.com/joaomlucio/projeto/api/user/models"
 )
 
 var collection = mgm.Collection
+var ctx = mgm.Context
 
 
 func ValidateStruct(user interface{}) []*dtos.ErrorResponse {

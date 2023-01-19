@@ -6,7 +6,7 @@ import (
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"github.com/joaomlucio/projeto/api/main/user/models"
+	"github.com/joaomlucio/projeto/api/mongo/models"
 )
 
 var Collection *mgm.Collection
