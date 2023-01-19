@@ -1,11 +1,23 @@
 package services
 
-func ValidateStruct(user interface{}) []*ErrorResponse {
-    var errors []*ErrorResponse
+import (
+	"github.com/go-playground/validator"
+	"github.com/joaomlucio/projeto/api/user/models/dtos"
+	mgm "github.com/joaomlucio/projeto/api/mongo"
+
+	"github.com/joaomlucio/projeto/api/user/models"
+)
+
+var collection = mgm.Collection
+
+
+func ValidateStruct(user interface{}) []*dtos.ErrorResponse {
+	validate := validator.New()
+    var errors []*dtos.ErrorResponse
     err := validate.Struct(user)
     if err != nil {
         for _, err := range err.(validator.ValidationErrors) {
-            var element ErrorResponse
+            var element dtos.ErrorResponse
             element.FailedField = err.StructNamespace()
             element.Tag = err.Tag()
             element.Value = err.Param()
@@ -15,24 +27,24 @@ func ValidateStruct(user interface{}) []*ErrorResponse {
     return errors
 }
 
-func createUser(user *dtos.CreateUser) (*mongo.InsertOneResult, error) {
+func CreateUser(user *dtos.CreateUser) (*mongo.InsertOneResult, error) {
 	return collection.InsertOne(ctx, user)
 }
 
-func updateUser(id string, user *dtos.UpdateUser) (*mongo.UpdateResult, error) {
+func UpdateUser(id string, user *dtos.UpdateUser) (*mongo.UpdateResult, error) {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{primitive.E{Key: "_id", Value: objectID}}
 	update := bson.D{primitive.E{Key: "$set", Value: user}}
 	return collection.UpdateOne(ctx, filter, update)
 }
 
-func deleteUser(id string) (*mongo.DeleteResult, error) {
+func DeleteUser(id string) (*mongo.DeleteResult, error) {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{primitive.E{Key: "_id", Value: objectID}}
 	return collection.DeleteOne(ctx, filter)
 }
 
-func findUsers() ([]*models.User, error) {
+func FindUsers() ([]*models.User, error) {
 	var users []*models.User
 	filter := bson.D{{}}
 	cursor, err := collection.Find(ctx, filter)

@@ -6,33 +6,23 @@ import (
 
 	"context"
 	"encoding/json"
-	"log"
-
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-
-	"github.com/joaomlucio/projeto/api/mongo"
 )
 
-var collection *mongo.Collection
-var ctx = context.TODO()
-var validate = validator.New()
+// func init() {
+// 	//clientOptions := options.Client().ApplyURI("mongodb://user:password@mongo:27017/")
+// 	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
+// 	client, err := mongo.Connect(ctx, clientOptions)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-func init() {
-	//clientOptions := options.Client().ApplyURI("mongodb://user:password@mongo:27017/")
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
-	client, err := mongo.Connect(ctx, clientOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	err = client.Ping(ctx, nil)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	err = client.Ping(ctx, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	collection = client.Database("local").Collection("projeto")
-}
+// 	collection = client.Database("local").Collection("projeto")
+// }
 
 func main() {
 	app := fiber.New()

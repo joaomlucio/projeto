@@ -1,5 +1,9 @@
 package controllers
 
+import (
+	""
+)
+
 func GetAll(c *fiber.Ctx) error {
 	users, err := findUsers()
 	if err != nil {

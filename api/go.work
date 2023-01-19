@@ -1,4 +1,6 @@
 go 1.19
 
-use ./mongo
-use .
+use (
+    ./main
+    ./mongo
+)
