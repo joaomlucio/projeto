@@ -1,9 +1,11 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"github.com/kamva/mgm/v3"
+)
 
 type User struct {
-	ID       primitive.ObjectID  `json:"id,omitempty" bson:"_id,omitempty"`
+	mgm.DefaultModel `bson:",inline"`
 	Name     string `json:"name,omitempty" bson:"name,omitempty"`
 	IsActive *bool   `json:"isActive,omitempty" bson:"isActive"`
 }

@@ -8,97 +8,15 @@ import (
 	"encoding/json"
 	"log"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 
-	"github.com/joaomlucio/projeto/api/user/models"
+	"github.com/joaomlucio/projeto/api/mongo"
 )
-
-
-
-type CreateUser struct {
-	Name     string `validate:"required,min=6,max=255" json:"name" bson:"name"`
-	IsActive *bool   `validate:"required,boolean" json:"isActive" bson:"isActive"`
-}
-
-type UpdateUser struct {
-	Name     string `validate:"omitempty,min=6,max=255" json:"name,omitempty" bson:"name,omitempty"`
-	IsActive *bool   `validate:"omitempty,boolean" json:"isActive,omitempty" bson:"isActive,omitempty"`
-}
-
-type ErrorResponse struct {
-    FailedField string
-    Tag         string
-    Value       string
-}
 
 var collection *mongo.Collection
 var ctx = context.TODO()
 var validate = validator.New()
-
-func ValidateStruct(user interface{}) []*ErrorResponse {
-    var errors []*ErrorResponse
-    err := validate.Struct(user)
-    if err != nil {
-        for _, err := range err.(validator.ValidationErrors) {
-            var element ErrorResponse
-            element.FailedField = err.StructNamespace()
-            element.Tag = err.Tag()
-            element.Value = err.Param()
-            errors = append(errors, &element)
-        }
-    }
-    return errors
-}
-
-func createUser(user *CreateUser) (*mongo.InsertOneResult, error) {
-	return collection.InsertOne(ctx, user)
-}
-
-func updateUser(id string, user *UpdateUser) (*mongo.UpdateResult, error) {
-	objectID, _ := primitive.ObjectIDFromHex(id)
-	filter := bson.D{primitive.E{Key: "_id", Value: objectID}}
-	update := bson.D{primitive.E{Key: "$set", Value: user}}
-	return collection.UpdateOne(ctx, filter, update)
-}
-
-func deleteUser(id string) (*mongo.DeleteResult, error) {
-	objectID, _ := primitive.ObjectIDFromHex(id)
-	filter := bson.D{primitive.E{Key: "_id", Value: objectID}}
-	return collection.DeleteOne(ctx, filter)
-}
-
-func findUsers() ([]*models.User, error) {
-	var users []*models.User
-	filter := bson.D{{}}
-	cursor, err := collection.Find(ctx, filter)
-	if err != nil {
-		return users, err
-	}
-
-	for cursor.Next(ctx) {
-		var u models.User
-		err := cursor.Decode(&u)
-		if err != nil {
-			return users, err
-		}
-		users = append(users, &u)
-	}
-
-	if err := cursor.Err(); err != nil {
-		return users, err
-	}
-
-	cursor.Close(ctx)
-
-	if len(users) == 0 {
-		return users, mongo.ErrNoDocuments
-	}
-
-	return users, nil
-}
 
 func init() {
 	//clientOptions := options.Client().ApplyURI("mongodb://user:password@mongo:27017/")
