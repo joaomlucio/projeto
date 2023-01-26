@@ -27,18 +27,18 @@ func ValidateStruct(user interface{}) []*dtos.ErrorResponse {
     return errors
 }
 
-func CreateUser(user *dtos.CreateUser) (*mongo.InsertOneResult, error) {
+func CreateUser(user *dtos.CreateUser) (, error) {
 	return collection.InsertOne(ctx, user)
 }
 
-func UpdateUser(id string, user *dtos.UpdateUser) (*mongo.UpdateResult, error) {
+func UpdateUser(id string, user *dtos.UpdateUser) ( error) {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{primitive.E{Key: "_id", Value: objectID}}
 	update := bson.D{primitive.E{Key: "$set", Value: user}}
 	return collection.UpdateOne(ctx, filter, update)
 }
 
-func DeleteUser(id string) (*mongo.DeleteResult, error) {
+func DeleteUser(id string) (error) {
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{primitive.E{Key: "_id", Value: objectID}}
 	return collection.DeleteOne(ctx, filter)
@@ -68,7 +68,7 @@ func FindUsers() ([]*models.User, error) {
 	cursor.Close(ctx)
 
 	if len(users) == 0 {
-		return users, mongo.ErrNoDocuments
+		return users,
 	}
 
 	return users, nil
