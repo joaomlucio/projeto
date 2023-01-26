@@ -6,6 +6,6 @@ import (
 
 type User struct {
 	mgm.DefaultModel `bson:",inline"`
-	Name     string `json:"name,omitempty" bson:"name,omitempty"`
-	IsActive *bool   `json:"isActive,omitempty" bson:"isActive"`
+	Name     string `json:"nome,omitempty" bson:"nome,omitempty"`
+	IsActive *bool   `json:"ativo,omitempty" bson:"ativo"`
 }

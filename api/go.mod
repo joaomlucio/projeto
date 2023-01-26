@@ -1,11 +1,10 @@
-module github.com/joaomlucio/projeto
+module github.com/joaomlucio/projeto/api
 
 go 1.19
 
 require (
-	github.com/go-playground/validator v9.31.0+incompatible
+	github.com/go-playground/validator/v10 v10.11.1
 	github.com/gofiber/fiber/v2 v2.41.0
-	github.com/joaomlucio/projeto/api v0.0.0-20230119113438-dd7fef9a57e1
 	github.com/kamva/mgm/v3 v3.5.0
 	go.mongodb.org/mongo-driver v1.11.1
 )
@@ -38,6 +37,5 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/text v0.3.7 // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

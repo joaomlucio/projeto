@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"log"
 
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -13,7 +14,10 @@ var Collection *mgm.Collection
 var Context context.Context
 
 func init(){
-	mgm.SetDefaultConfig(nil, "API", options.Client().ApplyURI("mongodb://eu:cafe-eh-vida@localhost:27017"))
+	err := mgm.SetDefaultConfig(nil, "api", options.Client().ApplyURI("mongodb://user:password@127.0.0.1:27018"))
+	if err != nil {
+		log.Fatal(err)
+	}
 	Collection = mgm.Coll(&models.User{})
 	Context = mgm.Ctx()
 }
