@@ -2,9 +2,9 @@ package services
 
 import (
 	"github.com/go-playground/validator"
-	"github.com/joaomlucio/projeto/api/mongo/models"
-	"github.com/joaomlucio/projeto/api/mongo/models/dtos"
 	mgm "github.com/joaomlucio/projeto/api/mongo"
+	"github.com/joaomlucio/projeto/api/user/models"
+	"github.com/joaomlucio/projeto/api/user/models/dtos"
 )
 
 var collection = mgm.Collection
