@@ -5,13 +5,15 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+
+	mongom "github.com/kamva/mgm/v3"
 	mgm "github.com/joaomlucio/projeto/api/mongo"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	
 	"github.com/joaomlucio/projeto/api/user/models"
 	"github.com/joaomlucio/projeto/api/user/models/dtos"
-	mongom "github.com/kamva/mgm/v3"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 var collection *mongom.Collection
@@ -40,28 +42,27 @@ func ValidateStruct(user interface{}) []*dtos.ErrorResponse {
 }
 
 func CreateUser(user *dtos.CreateUser) (*models.User, error) {
-	result, err := collection.InsertOne(ctx, user)
+	u := &models.User{Name: user.Name, IsActive: &user.IsActive}
+	err := collection.CreateWithCtx(ctx, u)
 	if err != nil {
 		return nil, err
 	}
-	id, _ := result.InsertedID.(primitive.ObjectID)
-	new_user, _ := FindUser(id.Hex())
-	return new_user, nil
+	return u, nil
 }
 
 func UpdateUser(id string, user *dtos.UpdateUser) (*models.User, error) {
-	objectID, _ := primitive.ObjectIDFromHex(id)
-	filter := bson.D{primitive.E{Key: "_id", Value: objectID}}
-	update := bson.D{primitive.E{Key: "$set", Value: user}}
-	result, err := collection.UpdateOne(ctx, filter, update)
+	u := new(models.User)
+	err := collection.FindByIDWithCtx(ctx, id, u)
 	if err != nil {
 		return nil, err
 	}
-	if result.MatchedCount == 0 {
+	u.Name = user.Name
+	u.IsActive = user.IsActive
+	err = collection.UpdateWithCtx(ctx, u)
+	if err != nil {
 		return nil, fiber.ErrNotFound
 	}
-	new_user, _ := FindUser(id)
-	return new_user, nil
+	return u, nil
 }
 
 func DeleteUser(id string) error {
@@ -72,7 +73,7 @@ func DeleteUser(id string) error {
 		}
 		return err
 	}
-	err = collection.Delete(user)
+	err = collection.DeleteWithCtx(ctx, user)
 	if err != nil {
 		return err
 	}
@@ -82,7 +83,7 @@ func DeleteUser(id string) error {
 func FindUsers() ([]models.User, error) {
 	users := []models.User{}
 	filter := bson.D{{}}	
-	err := collection.SimpleFind(&users, filter)
+	err := collection.SimpleFindWithCtx(ctx, &users, filter)
 
 	if err != nil {
 		return users, err
@@ -97,7 +98,7 @@ func FindUsers() ([]models.User, error) {
 
 func FindUser(id string) (*models.User, error) {
 	user := new(models.User)
-	err := collection.FindByID(id, user)
+	err := collection.FindByIDWithCtx(ctx, id, user)
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {

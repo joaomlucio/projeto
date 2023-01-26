@@ -14,7 +14,7 @@ var Collection *mgm.Collection
 var Context context.Context
 
 func init(){
-	err := mgm.SetDefaultConfig(nil, "api", options.Client().ApplyURI("mongodb://user:password@127.0.0.1:27018"))
+	err := mgm.SetDefaultConfig(nil, "api", options.Client().ApplyURI("mongodb://user:password@mongo:27017"))
 	if err != nil {
 		log.Fatal(err)
 	}
