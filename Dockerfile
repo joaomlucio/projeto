@@ -6,6 +6,6 @@ ADD . /app
 
 WORKDIR /app/api
 
-RUN go build -v -o main ./...
+RUN go build -v -o main .
 
 CMD ["/app/api/main"]
