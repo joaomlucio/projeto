@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/go-playground/validator/v10 v10.11.1
-	github.com/gofiber/fiber/v2 v2.52.1
+	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/kamva/mgm/v3 v3.5.0
 	go.mongodb.org/mongo-driver v1.11.1
 )
